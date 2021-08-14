@@ -1,5 +1,8 @@
+.bloop
+.vscode
 logs
 target
+metals.sbt
 /.bsp
 /.idea
 /.idea_modules
@@ -7,3 +10,4 @@ target
 /.project
 /.settings
 /RUNNING_PID
+/.metals
