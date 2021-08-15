@@ -3,9 +3,6 @@ package data.model
 import java.time.{ LocalDateTime, ZonedDateTime, ZoneOffset }
 
 import data.{ Enum, HasID, ID, Identifiable }
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
 /**
   * A ContactMethod is a way of contacting a user. The pair (type, address) is unique
