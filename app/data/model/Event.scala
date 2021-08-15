@@ -71,7 +71,7 @@ object Event {
     *     | (a)     |
     *     |         |
     *     v         |
-    *   Open        | (c)
+    *   Open        | (c)        Template
     *     |         |
     *     | (b)     |
     *     |         |
@@ -89,16 +89,21 @@ object Event {
     * organizer, or automatically by the system if at any point there are zero organizers.
     *
     * Cancelled events may not be reopened, and open events may not be reverted to a draft state.
+    *
+    * Template events belong to [[Series]], and allow quick creation of similarly-configured
+    * events. Non-Template events may not be converted into Templates, nor vice-versa.
     */
   object Status extends Enum[Status] {
     case object Draft extends Status("draft")
     case object Open extends Status("open")
     case object Cancelled extends Status("cancelled")
+    case object Template extends Status("template")
 
     val all: Set[Status] = Set(
       Draft,
       Open,
       Cancelled,
+      Template,
     )
     override val default: Option[Status] = Some(Draft)
   }
@@ -113,9 +118,9 @@ object Event {
       "invite",
       description = "Only people who have been invited.",
     )
-    case object Group extends Visibility(
-      "group",
-      description = "Only members of this event's group(s).",
+    case object Series extends Visibility(
+      "series",
+      description = "Only followers of this event's series.",
     )
     case object Link extends Visibility(
       "link",
