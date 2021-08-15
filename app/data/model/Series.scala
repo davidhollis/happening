@@ -38,6 +38,9 @@ case class EventInSeries(
   * The [[Profile]] used does not restrict in any way the profile(s) the User may sign up for
   * events with, and it is only visible to the user and to the owner of the Series. The User may
   * change which profile is associated with their Series membership at any time.
+  *
+  * In the (ideally impossible) event that this model links to a profile which does not belong to
+  * the user in question, the profile is visible to nobody.
   */
 case class FollowingSeries(
   user: ID[User],

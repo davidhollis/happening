@@ -42,7 +42,7 @@ case class Event(
     */
   maxGuests: Int,
   /** The maximum total number of invitees and guests.
-    * Once this limit is reached, subsequent people who RSVP "yes" will be placed on a waitlist.
+    * Once this limit is reached, subsequent people who Respond "yes" will be placed on a waitlist.
     */
   maxAttendance: Option[Int],
   /** Who is allowed to post discussion topics on the event page.
@@ -50,10 +50,10 @@ case class Event(
     * while still allowing open discussion.
     */
   postability: Event.Postability,
-  /** A list of questions attendees who RSVP "yes" will be asked.
+  /** A list of questions attendees who Respond "yes" will be asked.
     * Answers to these questions are only visible to event organizers.
     */
-  rsvpQuestions: Seq[String],
+  responseQuestions: Seq[String],
   id: ID[Event] = ID.random,
 ) extends HasID[Event]
 
@@ -129,7 +129,7 @@ object Event {
 
     val all: Set[Visibility] = Set(
       Invite,
-      Group,
+      Series,
       Link,
     )
     override val default: Option[Visibility] = Some(Invite)
