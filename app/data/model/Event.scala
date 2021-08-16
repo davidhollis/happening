@@ -180,16 +180,11 @@ object Event {
       "invitees",
       description = "Only people who have been invited.",
     )
-    case object Viewers extends Postability(
-      "viewers",
-      description = "Anyone who can see the event page.",
-    )
 
     val all: Set[Postability] = Set(
       Organizers,
       Attendees,
       Invitees,
-      Viewers,
     )
     override val default: Option[Postability] = Some(Organizers)
   }

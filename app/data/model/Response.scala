@@ -92,7 +92,7 @@ object Response {
     )
     case object AttendeesOnly extends Visibility(
       "attendees_only",
-      description = "Only to people who are attending the event.",
+      description = "Only people who are attending the event.",
     )
     case object Anyone extends Visibility(
       "anyone",
