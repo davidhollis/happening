@@ -13,10 +13,9 @@ import data.{ Enum, HasID, ID, Identifiable }
   * author to determine who can see (`visibility`) and comment (`commentability`) on it.
   *
   * In order to make a Post, its author must associate a [[Profile]] with the Event (if they don't
-  * have one, a noncommittal [[Response]] will be created). When making a post, the frontend should
-  * display a warning if the Post's visibility would expose profile data to a wider audience than
-  * the author's [[Response]] would normally allow. Such a situation is allowed, since it's User-
-  * initiated, but we want to ensure the User is informed about the privacy implications.
+  * have one, a [[Response]] with a status of [[Response.Status.Noncommittal]] will be created). If
+  * a viewer does not have permission to see that Profile, they will see an anonymized avatar
+  * that's unique to this event, and may be different for other events.
   */
 case class Post(
   event: ID[Event],

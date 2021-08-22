@@ -10,8 +10,12 @@ import data.{ Enum, HasID, ID, Identifiable }
   * status is [[Response.Status.RemindMe]]. All fields are visible to and editable by the User.
   *
   * The [[Profile]] data's visibility is controlled by `profileVisibility`. When viewing an event
-  * page, any Responses the viewer is not permitted to see are simply grouped into an anonymized
-  * count by `status`, excluding [[Response.Status.RemindMe]], counts of which are not reported.
+  * page, any Responses with Profiles the viewer is not permitted to see appear with an anonymized
+  * avatar unique to the (user, event) pair.
+  *
+  * Responses with a status of [[Response.Status.Noncommittal]] do not appear to anyone beyond the
+  * User they relate to and the event organizers. Those exist only to associate a Profile with an
+  * Event for the purposes of [[Post]]s or [[Comment]]s.
   */
 case class Response(
   user: ID[User],
@@ -27,13 +31,6 @@ case class Response(
   profileVisibility: Response.Visibility,
   /** Any additional information the User wishes to express to the organizers. */
   comment: String,
-  /** The time at which the user will receive a reminder for this event, if any.
-    * Reminders ignore notification settings because they're explicitly opt-in. They will send the
-    * notification method to all preferred [[ContactMethod]]s of the User.
-    */
-  reminderTime: Option[ZonedDateTime],
-  /** Whether the reminder has been sent. At most one reminder is sent per event. */
-  reminderSent: Boolean,
   /** The number of additional guests the User is bringing.
     *
     * This is visible only to the organizers and the responding User.
@@ -64,20 +61,20 @@ object Response {
     case object Going extends Status("going")
     case object Waitlisted extends Status("waitlisted")
     case object Maybe extends Status("maybe")
-    case object RemindMe extends Status("remind_me")
     case object NotGoing extends Status("not_going")
     case object Request extends Status("request")
+    case object Noncommittal extends Status("noncommittal")
 
     val all: Set[Status] = Set(
       Organizer,
       Going,
       Waitlisted,
       Maybe,
-      RemindMe,
       NotGoing,
       Request,
+      Noncommittal,
     )
-    override val default: Option[Status] = Some(Maybe)
+    override val default: Option[Status] = Some(Noncommittal)
   }
 
   sealed abstract class Visibility(
@@ -107,3 +104,16 @@ object Response {
     override val default: Option[Visibility] = Some(OrganizersOnly)
   }
 }
+
+/** A request from a [[User]] to be notified of an upcoming [[Event]]. */
+case class Reminder(
+  user: ID[User],
+  event: ID[Event],
+  /** The time at which the user will receive a reminder for this event, if any.
+    * Reminders ignore notification settings because they're explicitly opt-in. They will send the
+    * notification method to all preferred [[ContactMethod]]s of the User.
+    */
+  reminderTime: Option[ZonedDateTime],
+  /** Whether the reminder has been sent. This Reminder will be sent only once. */
+  reminderSent: Boolean,
+)
