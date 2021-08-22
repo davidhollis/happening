@@ -3,6 +3,8 @@ package data
 import java.util.UUID
 import scala.util.Try
 
+import util.Environment
+
 case class Identifiable[T](prefix: String)
 
 class ID[T](val uuid: UUID, val idable: Identifiable[T]) {
@@ -22,6 +24,15 @@ object ID {
     
     def random[T: Identifiable]: ID[T] =
         new ID(UUID.randomUUID, implicitly[Identifiable[T]])
+    
+    implicit def idColumnType[T: Identifiable](implicit env: Environment) = {
+        import env.dbProfile.api._
+        
+        MappedColumnType.base[ID[T], String](
+            { id => id.toString },
+            { str => ID.parse[T](str).get },
+        )
+    }
 }
 
 trait HasID[T] { self: T =>
